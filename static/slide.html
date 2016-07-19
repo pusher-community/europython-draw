@@ -66,6 +66,10 @@
 
     <script>
 
+      if(!localStorage.getItem('SECRET_TOKEN')) {
+        alert("missing token")
+      } else {
+
       // Enable pusher logging - don't include this in production
       // Pusher.logToConsole = true;
 
@@ -127,7 +131,7 @@
 
 
           if(!localStorage.getItem('SECRET_TOKEN')) {
-            return consle.log('no token')
+            return console.log('no token')
           }
 
           var form = new FormData()
@@ -154,6 +158,8 @@
           timer = setTimeout(fn, millis)
         }
       }
+
+    }// allowed
     </script>
 
   </body>
