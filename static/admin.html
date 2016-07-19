@@ -9,8 +9,8 @@
       <input type="text" data-key="SECRET_TOKEN">
     </label>
 
-    <button>test</button>
-    <button>foo</button>
+    <button>color</button>
+    <button>sound</button>
     <button>bar</button>
 
     <script type="text/javascript">
@@ -32,7 +32,7 @@
           var form = new FormData()
 
           form.append('SECRET_TOKEN', localStorage.getItem('SECRET_TOKEN'))
-          form.append('ACTION', button.innerText)
+          form.append('EVENT', button.innerText)
 
           fetch("/broadcast", {
             method: "POST",
