@@ -14,12 +14,19 @@
         width: 100vw;
         height: 100vh;
       }
-      /*stop{
-        transition: 1s
-      }*/
+
+      path{
+        transition: fill .15s;
+      }
+
+      #say {
+        display:none; position: absolute; font-size: 5em; font-family: monospace; text-align: center; z-index: 1; padding: 1em 0; right:0; left:0; bottom:0; top:0; background: rgba(255,255,255,0.8);
+      }
     </style>
   </head>
   <body>
+
+    <div id="say"></div>
 
     <svg
        viewBox="0 0 130 130"
@@ -108,19 +115,29 @@
 
     <script type="text/javascript">
 
-      function colour(a,b) {
-
-        var top    = document.getElementById('logo-top')
-        var bottom = document.getElementById('logo-bottom')
-
-        top.style.fill = a
-        bottom.style.fill = b
-
+      function paint(a,b) {
+        document.getElementById('logo-top').style.fill = a
+        document.getElementById('logo-bottom').style.fill = b
       }
 
-      colour('red', 'blue')
+      paint('#eee', '#eee')
 
-      colour('url(#linearGradient1478)', 'url(#linearGradient1475)')
+      function randomColors(){
+        paint(
+          'hsl('+Math.floor(Math.random()*360)+', 90%, 50%)',
+          'hsl('+Math.floor(Math.random()*360)+', 90%, 50%)'
+        )
+      }
+
+      function displayText(text) {
+        var node = document.getElementById('say')
+        node.style.display = text ? 'block' : 'none'
+        node.innerText = text
+      }
+
+      // setInterval(randomColors, 500)
+
+      // colour('url(#linearGradient1478)', 'url(#linearGradient1475)')
     </script>
 
   </body>
