@@ -34,5 +34,11 @@ def slide():
     return app.send_static_file('slide.html')
 
 
+@app.route("/broadcast", methods=['POST'])
+def broadcast():
+    print request.form.get(u'SECRET_TOKEN')
+    print request.form.get(u'ACTION')
+    return "ok"
+
 if __name__ == "__main__":
     app.run()

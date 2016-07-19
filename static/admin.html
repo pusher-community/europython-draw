@@ -9,6 +9,10 @@
       <input type="text" data-key="SECRET_TOKEN">
     </label>
 
+    <button>test</button>
+    <button>foo</button>
+    <button>bar</button>
+
     <script type="text/javascript">
 
       [].forEach.call(document.querySelectorAll('[data-key]'), function(el){
@@ -19,6 +23,23 @@
         el.addEventListener('change', function() {
           localStorage.setItem(key, el.value)
         })
+      });
+
+      [].forEach.call(document.querySelectorAll('button'), function(button){
+        button.addEventListener('click', function(e) {
+          e.preventDefault()
+
+          var form = new FormData()
+
+          form.append('SECRET_TOKEN', localStorage.getItem('SECRET_TOKEN'))
+          form.append('ACTION', button.innerText)
+
+          fetch("/broadcast", {
+            method: "POST",
+            body: form
+          })
+
+        }, false)
       })
 
     </script>
