@@ -32,13 +32,23 @@
         height: 2em;
         border: none;
       }
+      button {
+        border: none;
+        background: none;
+        font-size: 2em;
+        transition: .2s;
+        cursor: pointer;
+      }
+      button:hover{
+        transform: scale(1.2)
+      }
     </style>
   </head>
   <body>
     <div class="slide">
 
       <h1>eupy16.herokuapp.com</h1>
-      <h2><span id="member-count">0</span> users online</h2>
+      <h2><span id="member-count">0</span> devices</h2>
 
       <img src="/static/pusher.png" alt="Pusher Logo" height="80" />
 
@@ -46,6 +56,10 @@
         <input type="color" value="#cccccc" name="top">
         <input type="color" value="#cccccc" name="bottom">
       </div>
+
+      <button data-action="color">🖌</button>
+      <button data-action="sound">🔊</button>
+      <button data-action="win">🎁</button>
     </div>
 
     <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
@@ -105,6 +119,33 @@
 
         }, 150))
       })
+
+
+
+      ![].forEach.call(document.querySelectorAll('button[data-action]'), function(el){
+        el.addEventListener('click', function(){
+
+
+          if(!localStorage.getItem('SECRET_TOKEN')) {
+            return consle.log('no token')
+          }
+
+          var form = new FormData()
+          form.append('SECRET_TOKEN', localStorage.getItem('SECRET_TOKEN'))
+          form.append('EVENT', el.dataset.action)
+
+          fetch("/broadcast", {
+            method: "POST",
+            body: form
+          })
+
+
+        })
+      })
+
+
+
+
 
       function throttle(fn, millis){
         var timer
