@@ -50,6 +50,8 @@ def broadcast():
 
     pusher.trigger(u'presence-demo', event, { u'id': winner })
 
+    print event, { u'id': winner }
+
     return "ok"
 
 if __name__ == "__main__":
