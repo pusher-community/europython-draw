@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>EuroPython2016</title>
+    <meta name="viewport" content="initial-scale=1">
     <style media="screen">
     html, body {
       margin:0
@@ -29,6 +30,8 @@
    <script type="text/javascript">
 // UI CODE
 
+(function(){0=="performance"in window&&(window.performance={});Date.now=Date.now||function(){return(new Date).getTime()};if(0=="now"in window.performance){var a=Date.now();performance.timing&&performance.timing.navigationStart&&(a=performance.timing.navigationStart);window.performance.now=function(){return Date.now()-a}}})();
+
 function _colours(a,b) {document.getElementById("logo-top").style.fill=a;document.getElementById("logo-bottom").style.fill=b}
 function reset() {_colours("url(#linearGradient1478)","url(#linearGradient1475)");text("")}_colours("#eee","#eee");
 function color()
@@ -37,6 +40,84 @@ function text(a){var b=document.getElementById("say");b.style.display=a?"block":
 
 var play=function(){var e=[880,783.99,698.46,659.26,587.33,523.25,493.88];window.AudioContext=window.AudioContext||window.webkitAudioContext;window.context=parent.context||new AudioContext;return function(c,d){c=c||e[Math.floor(Math.random()*e.length)];d=d||.8;var b=context.createOscillator();b.frequency.value=Math.round(c);var a=context.createGain();a.gain.value=1E-4;now=context.currentTime;a.gain.cancelScheduledValues(now);a.gain.exponentialRampToValueAtTime(d,now+.25);a.gain.exponentialRampToValueAtTime(1E-4,
 now+2);a.gain.setTargetAtTime(1E-4,now+4,1E-4);b.connect(a);a.connect(context.destination);b.start(0);setTimeout(function(){b.stop(0);b.disconnect();a.disconnect()},2500)}}();
+
+var _schedule = []
+// look for any scheduled items, and pass
+function _process_schedule(t){
+  if(_schedule.length) {
+    _schedule = _schedule.filter(function(s){
+      if(s.t < t) {
+        s.fn()
+      } else {
+        return true
+      }
+    })
+  }
+  requestAnimationFrame(_process_schedule)
+}
+requestAnimationFrame(_process_schedule)
+
+
+function schedule(is_winner) {
+  var now = window.performance.now()
+  _schedule = [
+    t(1000,0.4),
+    t(1000,0.4),
+    t(800,0.4),
+    t(800,0.5),
+    t(800,0.4), t(800,0.5), t(800,0.5), t(800,0.5), t(800,0.5), t(800,0.5), t(800,0.6), t(500,0.6), t(500,0.6), t(500,0.6), t(500,0.6), t(500,0.6), t(500,0.6), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7),
+    t(400,0.7),
+    t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7), t(400,0.7),
+    t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7),
+    t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7),
+    t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7),
+    t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7),
+    t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7),
+    t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7), t(200,0.7),
+    t(200,0.7), t(300,0.7), t(400,0.7), t(500,0.7), t(600,0.7), t(700,0.7), t(800,0.7), t(900,0.7),
+    {t: 1000, fn: function(){
+      reset()
+      if(is_winner) {
+        win()
+      } else {
+        lose()
+      }
+    }}
+  ].map(function(item){
+    item.t = (now += item.t)
+    return item
+  })
+  function t(x,y) {
+    return {t: x, fn: function(){
+      color()
+      play()
+    }}
+  }
+}
+
+function lose() {
+  _colours('#ccc', '#ccc')
+  text('')
+}
+
+function win() {
+  text("You've WON!")
+  _colours('blue', 'blue')
+
+  setTimeout(play, 1000)
+  setTimeout(play, 2000)
+  setTimeout(play, 3000)
+}
+
+
+// start audio context on ios
+var iosHack = function(){
+  play(false, 0.001)
+  document.removeEventListener('touchstart', iosHack)
+}
+document.addEventListener('touchstart', iosHack, false)
+
+
      </script>
 
     <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
@@ -59,6 +140,28 @@ now+2);a.gain.setTargetAtTime(1E-4,now+4,1E-4);b.connect(a);a.connect(context.de
       channel.bind('sound', function(){
         color()
         play()
+      })
+      channel.bind('reload', function(){
+        window.location.reload()
+      })
+      channel.bind('reset', function(){
+        _schedule = []
+        reset()
+      })
+
+      channel.bind('quick-win', function(data) {
+        _schedule = []
+        reset()
+        if(data.id == channel.members.myID) {
+          win()
+        } else {
+          lose()
+        }
+      })
+
+      channel.bind('win', function(data) {
+        reset()
+        schedule(data.id == channel.members.myID)
       })
 
     </script>
