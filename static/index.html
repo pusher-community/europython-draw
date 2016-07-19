@@ -103,10 +103,6 @@ function lose() {
 function win() {
   text("You've WON!")
   _colours('blue', 'blue')
-
-  setTimeout(play, 1000)
-  setTimeout(play, 2000)
-  setTimeout(play, 3000)
 }
 
 
@@ -137,6 +133,15 @@ document.addEventListener('touchstart', iosHack, false)
       channel.bind('color', function(){
         color()
       })
+
+      channel.bind('set-color-top', function(data){
+        document.getElementById("logo-top").style.fill = data.value
+      })
+
+      channel.bind('set-color-bottom', function(data){
+        document.getElementById("logo-bottom").style.fill = data.value
+      })
+
       channel.bind('sound', function(){
         color()
         play()

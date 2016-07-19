@@ -3,28 +3,49 @@
   <head>
     <meta charset="utf-8">
     <title>EuroPython2016</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,400,700" rel="stylesheet">
+
     <style>
       .slide {
         margin: 30px auto;
-        width: 800px;
         text-align: center;
-        font-family: 'Helvetica', 'Arial', sans-serif;
+        font-family: 'Roboto Mono', monospace;
+        color: #3b454a;
       }
 
       .slide h1 {
         font-size: 50px;
+        font-weight: 100
       }
 
       .slide h2 {
         font-size: 40px;
+        font-weight: 100
+      }
+
+      #cols {
+        margin:2em;
+      }
+      input{
+        margin:auto;
+        width: 2em;
+        height: 2em;
+        border: none;
       }
     </style>
   </head>
   <body>
     <div class="slide">
-      <img src="/static/pusher.png" alt="Pusher Logo" height="150" />
+
       <h1>eupy16.herokuapp.com</h1>
       <h2><span id="member-count">0</span> users online</h2>
+
+      <img src="/static/pusher.png" alt="Pusher Logo" height="80" />
+
+      <div id="cols">
+        <input type="color" value="#cccccc" name="top">
+        <input type="color" value="#cccccc" name="bottom">
+      </div>
     </div>
 
     <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
@@ -32,7 +53,7 @@
     <script>
 
       // Enable pusher logging - don't include this in production
-      Pusher.logToConsole = true;
+      // Pusher.logToConsole = true;
 
       var countSpan = document.getElementById('member-count');
 
@@ -61,6 +82,37 @@
       channel.bind('pusher:member_removed', function(member) {
         updateMemberCount(memberCount - 1);
       });
+
+      [].forEach.call(document.querySelectorAll('input[type=color]'), function(el){
+        el.addEventListener('change', throttle(function(){
+
+          console.log('change')
+
+          if(!localStorage.getItem('SECRET_TOKEN')) {
+            return consle.log('no token')
+          }
+
+          var form = new FormData()
+          form.append('SECRET_TOKEN', localStorage.getItem('SECRET_TOKEN'))
+          form.append('EVENT', 'set-color-' + el.name)
+          form.append('VALUE', el.value)
+
+          fetch("/broadcast", {
+            method: "POST",
+            body: form
+          })
+
+
+        }, 150))
+      })
+
+      function throttle(fn, millis){
+        var timer
+        return function(){
+          clearTimeout(timer)
+          timer = setTimeout(fn, millis)
+        }
+      }
     </script>
 
   </body>

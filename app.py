@@ -40,6 +40,7 @@ def slide():
 def broadcast():
     secret_token = request.form.get(u'SECRET_TOKEN') or None;
     event = request.form.get(u'EVENT') or None;
+    value = request.form.get(u'VALUE') or None;
 
     if secret_token == None or event == None or secret_token != os.environ['PASSWORD']:
         return abort(403)
@@ -48,9 +49,9 @@ def broadcast():
     user_ids = [user[u'id'] for user in chatroom_users]
     winner = random.choice(user_ids)
 
-    pusher.trigger(u'presence-demo', event, { u'id': winner })
+    pusher.trigger(u'presence-demo', event, { u'id': winner, u'value': value })
 
-    print event, { u'id': winner }
+    print event, { u'id': winner, u'value': value }
 
     return "ok"
 
