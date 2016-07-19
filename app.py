@@ -1,5 +1,7 @@
 import os
-from flask import Flask, request, jsonify
+import random
+from flask import Flask, request, jsonify, abort
+
 from pusher import Pusher
 
 pusher = Pusher(
@@ -36,8 +38,18 @@ def slide():
 
 @app.route("/broadcast", methods=['POST'])
 def broadcast():
-    print request.form.get(u'SECRET_TOKEN')
-    print request.form.get(u'ACTION')
+    secret_token = request.form.get(u'SECRET_TOKEN') or None;
+    event = request.form.get(u'EVENT') or None;
+
+    if secret_token == None or event == None or secret_token != os.environ['PASSWORD']:
+        return abort(403)
+
+    chatroom_users = pusher.users_info(u'presence-demo')[u'users']
+    user_ids = [user[u'id'] for user in chatroom_users]
+    winner = random.choice(user_ids)
+
+    pusher.trigger(u'presence-demo', event, { u'id': winner })
+
     return "ok"
 
 if __name__ == "__main__":
