@@ -115,27 +115,17 @@
 
     <script type="text/javascript">
 
-      function paint(a,b) {
-        document.getElementById('logo-top').style.fill = a
-        document.getElementById('logo-bottom').style.fill = b
-      }
+      function _colours(a,b) {document.getElementById("logo-top").style.fill=a;document.getElementById("logo-bottom").style.fill=b}
+      function reset() {_colours("url(#linearGradient1478)","url(#linearGradient1475)");text("")}_colours("#eee","#eee");
+      function color()
+      {_colours("hsl("+Math.floor(360*Math.random())+", 90%, 50%)","hsl("+Math.floor(360*Math.random())+", 90%, 50%)")}
+      function text(a){var b=document.getElementById("say");b.style.display=a?"block":"none";b.innerText=a};
 
-      paint('#eee', '#eee')
+      var play=function(){var e=[880,783.99,698.46,659.26,587.33,523.25,493.88];window.AudioContext=window.AudioContext||window.webkitAudioContext;window.context=parent.context||new AudioContext;return function(c,d){c=c||e[Math.floor(Math.random()*e.length)];d=d||.8;var b=context.createOscillator();b.frequency.value=Math.round(c);var a=context.createGain();a.gain.value=1E-4;now=context.currentTime;a.gain.cancelScheduledValues(now);a.gain.exponentialRampToValueAtTime(d,now+.25);a.gain.exponentialRampToValueAtTime(1E-4,
+now+2);a.gain.setTargetAtTime(1E-4,now+4,1E-4);b.connect(a);a.connect(context.destination);b.start(0);setTimeout(function(){b.stop(0);b.disconnect();a.disconnect()},2500)}}();
 
-      function randomColors(){
-        paint(
-          'hsl('+Math.floor(Math.random()*360)+', 90%, 50%)',
-          'hsl('+Math.floor(Math.random()*360)+', 90%, 50%)'
-        )
-      }
 
-      function displayText(text) {
-        var node = document.getElementById('say')
-        node.style.display = text ? 'block' : 'none'
-        node.innerText = text
-      }
-
-      // setInterval(randomColors, 500)
+      // setInterval(color, 500)
 
       // colour('url(#linearGradient1478)', 'url(#linearGradient1475)')
     </script>
