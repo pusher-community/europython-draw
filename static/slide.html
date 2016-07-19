@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>EuroPython2016</title>
+    <style>
+      .slide {
+        margin: 30px auto;
+        width: 800px;
+        text-align: center;
+        font-family: 'Helvetica', 'Arial', sans-serif;
+      }
+
+      .slide h1 {
+        font-size: 50px;
+      }
+
+      .slide h2 {
+        font-size: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide">
+      <img src="/static/pusher.png" alt="Pusher Logo" height="150" />
+      <h1>eupy16.herokuapp.com</h1>
+      <h2><span id="member-count">0</span> users online</h2>
+    </div>
+
+    <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
+
+    <script>
+
+      // Enable pusher logging - don't include this in production
+      Pusher.logToConsole = true;
+
+      var countSpan = document.getElementById('member-count');
+
+      var memberCount = 0;
+
+      function updateMemberCount(count) {
+        memberCount = count;
+        countSpan.innerHTML = count;
+      }
+
+      var pusher = new Pusher('87d7bf07035146dd4fa7', {
+        cluster: 'eu',
+        encrypted: true
+      })
+
+      var channel = pusher.subscribe('presence-demo');
+
+      channel.bind('pusher:subscription_succeeded', function(members) {
+        updateMemberCount(members.count);
+      });
+
+      channel.bind('pusher:member_added', function(member) {
+        updateMemberCount(memberCount + 1);
+      });
+
+      channel.bind('pusher:member_removed', function(member) {
+        updateMemberCount(memberCount - 1);
+      });
+    </script>
+
+  </body>
+</html>

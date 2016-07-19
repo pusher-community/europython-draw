@@ -29,6 +29,10 @@ def auth():
     )
     return jsonify(auth)
 
+@app.route("/slide")
+def slide():
+    return app.send_static_file('slide.html')
+
 
 if __name__ == "__main__":
     app.run()
