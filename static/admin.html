@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>(secret admin page)</title>
+  </head>
+  <body>
+    <label>
+      <input type="text" data-key="SECRET_TOKEN">
+    </label>
+
+    <script type="text/javascript">
+
+      [].forEach.call(document.querySelectorAll('[data-key]'), function(el){
+        var key = el.dataset.key
+
+        el.value = localStorage.getItem(key) || ''
+
+        el.addEventListener('change', function() {
+          localStorage.setItem(key, el.value)
+        })
+      })
+
+    </script>
+  </body>
+</html>
